@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TASK MANAGER</title>
+    <link rel="stylesheet" href="{% load static %}{% static 'styles.css' %}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+    <!-- Navigation bar -->
+    <nav>
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Tasks</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <h1>Task List</h1>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Assigned To</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for task in tasks %}
+                <tr data-task-id="{{ task.id }}">
+                    <td class="editable" data-field="title">{{ task.title }}</td>
+                    <td class="editable" data-field="description">{{ task.description }}</td>
+                    <td>{{ task.assigned_to.username }}</td>
+                    <td class="editable" data-field="status">{{ task.get_status_display }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4">No tasks available.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $(".editable").click(function () {
+                var currentElement = $(this);
+                var originalValue = currentElement.text();
+                var taskId = currentElement.closest("tr").data("task-id");
+                var fieldName = currentElement.data("field");
+
+                // Convert to input field
+                var input = $("<input>", {
+                    type: "text",
+                    value: originalValue,
+                    blur: function () {
+                        var newValue = $(this).val();
+                        currentElement.text(newValue);
+
+                        // AJAX call to save the updated value
+                        $.ajax({
+                            url: "/update-task/",  // URL xử lý cập nhật trong views.py
+                            method: "POST",
+                            data: {
+                                'id': taskId,
+                                'field': fieldName,
+                                'value': newValue,
+                                'csrfmiddlewaretoken': '{{ csrf_token }}'
+                            },
+                            success: function (response) {
+
+                            },
+                            error: function () {
+
+                            }
+                        });
+                    },
+                    keyup: function (e) {
+                        if (e.keyCode === 13) $(this).blur();  // Enter key
+                    }
+                });
+
+                currentElement.empty().append(input);
+                input.focus();
+            });
+        });
+    </script>
+</body>
+
+</html>

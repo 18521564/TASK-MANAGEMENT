@@ -1,0 +1,75 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+/* Navigation bar styling */
+nav ul {
+    list-style-type: none;
+    background-color: #333;
+    overflow: hidden;
+}
+
+nav ul li {
+    display: inline;
+    float: left;
+}
+
+nav ul li a {
+    display: block;
+    padding: 14px 20px;
+    text-decoration: none;
+    color: white;
+}
+
+nav ul li a:hover {
+    background-color: #575757;
+}
+
+/* Table container with scrollbars */
+.table-container {
+    max-width: 100%;
+    /* Horizontal scroll */
+    max-height: 400px;
+    /* Limit height to show 20 rows */
+    overflow-x: auto;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    margin: 20px 0;
+}
+
+/* Table styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 800px;
+    /* Minimum width to force horizontal scroll */
+}
+
+th,
+td {
+    border: 1px solid #ddd;
+    padding: 5px 10px;
+    /* Smaller padding for smaller rows */
+    text-align: left;
+    font-size: 14px;
+    /* Smaller font size for rows */
+    height: 30px;
+    /* Row height like Google Sheets */
+}
+
+th {
+    background-color: #f2f2f2;
+    position: sticky;
+    top: 0;
+    /* Sticky header */
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
